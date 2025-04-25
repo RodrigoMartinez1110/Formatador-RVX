@@ -135,10 +135,9 @@ def limpar_e_padronizar(df):
         if df[col].dtype == 'object':
             df[col] = df[col].str.strip()
     
-    # Garante que telefones sejam strings
+    # Garante que telefones sejam strings limpas
     for col in ['TELEFONE1', 'TELEFONE2', 'TELEFONE3', 'TELEFONE4']:
-        df[col] = df[col].fillna('').astype(str)
-        # Remove caracteres não numéricos
+        df[col] = df[col].apply(lambda x: str(int(float(x))) if pd.notna(x) and str(x).replace('.', '', 1).isdigit() else str(x))
         df[col] = df[col].str.replace(r'\D', '', regex=True)
     
     return df
